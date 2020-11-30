@@ -4,7 +4,7 @@ import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 // import "./ViewerPDF.css";
 
-export const ViewerPDF = ({ pathPDF }) => {
+export const ViewerPDF = ({ pathPDF, scalePDF, rotatePDF, renderMode }) => {
   const samplePDF = pathPDF;
 
   const [numPages, setNumPages] = useState(null);
@@ -37,16 +37,17 @@ export const ViewerPDF = ({ pathPDF }) => {
         <Document
           // inputRef={ref}
           externalLinkTarget="_blank"
-          renderMode="svg"
-          // rotate={90}
+          renderMode={renderMode}
+          rotate={rotatePDF}
           file={samplePDF}
           onLoadSuccess={onDocumentLoadSuccess}
           onPassword={(callback) => {
             callback("123456");
-          }}>
+          }}
+        >
           <Page
             pageNumber={pageNumber}
-            scale={1.5}
+            scale={scalePDF}
             externalLinkTarget="_blank"
           />
         </Document>
@@ -60,7 +61,8 @@ export const ViewerPDF = ({ pathPDF }) => {
             variant="contained"
             color="primary"
             disabled={pageNumber <= 1}
-            onClick={previousPage}>
+            onClick={previousPage}
+          >
             PrevPage
           </Button>
 
@@ -69,7 +71,8 @@ export const ViewerPDF = ({ pathPDF }) => {
             variant="contained"
             color="primary"
             disabled={pageNumber >= numPages}
-            onClick={nextPage}>
+            onClick={nextPage}
+          >
             NextPage
           </Button>
         </div>

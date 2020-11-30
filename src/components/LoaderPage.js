@@ -10,6 +10,9 @@ import { base64string } from "../pdf-file/pdf";
 export const LoaderPage = () => {
   const [pathPDF, setPathPDF] = useState(null);
   const [selectedFilePdf, setSelectedFilePdf] = useState(null);
+  const [scalePDF, setScalePDF] = useState(1.5);
+  const [rotatePDF, setRotatePDF] = useState(0);
+  const [renderMode, setRenderMode] = useState("svg");
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,6 +48,18 @@ export const LoaderPage = () => {
     return blob;
   };
 
+  const onChangeHandleScale = (event) => {
+    setScalePDF(event.target.value);
+  };
+
+  const onChangeHandleRotate = (event) => {
+    setRotatePDF(event.target.value);
+  };
+
+  const onChangeHandleRenderMode = (event) => {
+    setRenderMode(event.target.value);
+  };
+
   return (
     <div>
       <div className="section">
@@ -76,13 +91,23 @@ export const LoaderPage = () => {
             const url = URL.createObjectURL(blob);
             setPathPDF(url);
             // console.log(window.open(url, "_blank"));
-          }}>
+          }}
+        >
           Open PDF.JS
         </Button>
         {/* ---------------------------------------- */}
-        <div>
+        <div
+          style={{
+            marginTop: "10px",
+          }}
+        >
           <InputLabel id="label">Scale</InputLabel>
-          <Select labelId="label" id="select" value={1}>
+          <Select
+            labelId="label"
+            id="select"
+            onChange={onChangeHandleScale}
+            value={scalePDF}
+          >
             <MenuItem value={0.5}>0.5</MenuItem>
             <MenuItem value={1}>1.0</MenuItem>
             <MenuItem value={1.5}>1.5</MenuItem>
@@ -91,8 +116,49 @@ export const LoaderPage = () => {
             <MenuItem value={3}>3.0</MenuItem>
           </Select>
         </div>
+        <div
+          style={{
+            marginTop: "10px",
+          }}
+        >
+          <InputLabel id="label">Rotate</InputLabel>
+          <Select
+            labelId="label"
+            id="select"
+            onChange={onChangeHandleRotate}
+            value={rotatePDF}
+          >
+            <MenuItem value={0}>0</MenuItem>
+            <MenuItem value={90}>90</MenuItem>
+            <MenuItem value={180}>180</MenuItem>
+            <MenuItem value={270}>270</MenuItem>
+          </Select>
+        </div>
+        <div
+          style={{
+            marginTop: "10px",
+          }}
+        >
+          <InputLabel id="label">renderMode</InputLabel>
+          <Select
+            labelId="label"
+            id="select"
+            onChange={onChangeHandleRenderMode}
+            value={renderMode}
+          >
+            <MenuItem value="canvas">canvas</MenuItem>
+            <MenuItem value="svg">svg</MenuItem>
+            <MenuItem value="none">none</MenuItem>
+          </Select>
+        </div>
         <div>
-          <ViewerPDF pathPDF={pathPDF} className="viewerPdf" />
+          <ViewerPDF
+            pathPDF={pathPDF}
+            scalePDF={scalePDF}
+            rotatePDF={rotatePDF}
+            renderMode={renderMode}
+            className="viewerPdf"
+          />
         </div>
       </div>
     </div>
